@@ -14,32 +14,144 @@
       background: #f3f4f6;
       color: #111827;
       min-height: 100vh;
+    }
+
+    /* Login screen */
+    #login-screen {
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
       padding: 24px;
     }
-    .container { max-width: 1200px; margin: 0 auto; }
+    .login-box {
+      background: white;
+      padding: 36px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      max-width: 400px;
+      width: 100%;
+    }
+    .login-box h1 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .login-box .subtitle {
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #4b5563;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      direction: ltr;
+      text-align: right;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    .login-btn {
+      width: 100%;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .login-btn:hover:not(:disabled) { background: #2563eb; }
+    .login-btn:disabled { opacity: 0.6; cursor: wait; }
+    .login-error {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    /* Dashboard */
+    #dashboard {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
     header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       gap: 16px;
       flex-wrap: wrap;
     }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
-    .stats { color: #6b7280; font-size: 14px; }
-    .refresh-btn {
+    .user-info { color: #6b7280; font-size: 13px; }
+    .header-actions { display: flex; gap: 8px; }
+    .header-btn {
       background: #3b82f6;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 8px;
       font-family: inherit;
       font-weight: 500;
       cursor: pointer;
       font-size: 14px;
     }
-    .refresh-btn:hover { background: #2563eb; }
+    .header-btn:hover { background: #2563eb; }
+    .header-btn.secondary { background: #6b7280; }
+    .header-btn.secondary:hover { background: #4b5563; }
 
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 640px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-card {
+      background: white;
+      padding: 18px 20px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .stat-value { font-size: 30px; font-weight: 800; line-height: 1; }
+    .stat-high   { color: #dc2626; }
+    .stat-medium { color: #d97706; }
+    .stat-low    { color: #16a34a; }
+    .stat-total  { color: #111827; }
+
+    /* Table */
     table {
       width: 100%;
       background: white;
@@ -55,8 +167,7 @@
       font-size: 12px;
       font-weight: 700;
       color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
       border-bottom: 1px solid #e5e7eb;
       white-space: nowrap;
     }
@@ -78,10 +189,10 @@
       font-weight: 700;
       white-space: nowrap;
     }
-    .badge-high { background: #fef2f2; color: #dc2626; }
+    .badge-high   { background: #fef2f2; color: #dc2626; }
     .badge-medium { background: #fffbeb; color: #d97706; }
-    .badge-low { background: #f0fdf4; color: #16a34a; }
-    .badge-other { background: #f3f4f6; color: #4b5563; }
+    .badge-low    { background: #f0fdf4; color: #16a34a; }
+    .badge-other  { background: #f3f4f6; color: #4b5563; }
 
     .summary-cell {
       max-width: 380px;
@@ -117,7 +228,7 @@
     .modal {
       background: white;
       border-radius: 16px;
-      max-width: 700px;
+      max-width: 720px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -134,10 +245,9 @@
       font-size: 12px;
       font-weight: 700;
       color: #6b7280;
-      text-transform: uppercase;
       margin-top: 20px;
       margin-bottom: 8px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.03em;
     }
     .modal .summary-text {
       color: #4b5563;
@@ -157,13 +267,12 @@
     }
     .modal-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 24px;
-      justify-content: flex-start;
       flex-wrap: wrap;
     }
     .btn {
-      padding: 12px 20px;
+      padding: 11px 18px;
       border-radius: 8px;
       border: none;
       font-family: inherit;
@@ -172,12 +281,15 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .btn-done { background: #16a34a; color: white; }
-    .btn-done:hover { background: #15803d; }
+    .btn-gmail { background: #ea4335; color: white; }
+    .btn-gmail:hover { background: #c5221f; }
+    .btn-done  { background: #16a34a; color: white; }
+    .btn-done:hover  { background: #15803d; }
     .btn-close { background: #e5e7eb; color: #374151; }
     .btn-close:hover { background: #d1d5db; }
-    .btn-copy { background: #3b82f6; color: white; }
-    .btn-copy:hover { background: #2563eb; }
+    .btn-copy  { background: #3b82f6; color: white; }
+    .btn-copy:hover  { background: #2563eb; }
+
     .toast {
       position: fixed;
       bottom: 24px;
@@ -197,14 +309,59 @@
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <!-- Login Screen -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h1>📬 תיבת המייל של רוני</h1>
+      <div class="subtitle">נדרשת התחברות כדי לצפות בתיבה</div>
+      <div id="login-error" class="login-error" style="display:none;"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="password">סיסמה</label>
+          <input type="password" id="password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="login-btn" id="login-btn">התחבר</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="dashboard">
     <header>
       <div>
         <h1>📬 תיבת המייל של רוני</h1>
-        <div class="stats" id="stats">טוען...</div>
+        <div class="user-info" id="user-info"></div>
       </div>
-      <button class="refresh-btn" onclick="loadEmails()">רענן</button>
+      <div class="header-actions">
+        <button class="header-btn" onclick="loadEmails()">רענן</button>
+        <button class="header-btn secondary" onclick="signOut()">יציאה</button>
+      </div>
     </header>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">סה״כ ממתינים</div>
+        <div class="stat-value stat-total" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">דחיפות גבוהה</div>
+        <div class="stat-value stat-high" id="stat-high">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">דחיפות בינונית</div>
+        <div class="stat-value stat-medium" id="stat-medium">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">דחיפות נמוכה</div>
+        <div class="stat-value stat-low" id="stat-low">0</div>
+      </div>
+    </div>
 
     <div id="content">
       <div class="loading-state">
@@ -214,6 +371,7 @@
     </div>
   </div>
 
+  <!-- Modal -->
   <div class="modal-backdrop" id="modal">
     <div class="modal">
       <h2 id="modal-title"></h2>
@@ -226,6 +384,7 @@
       <div class="draft" id="modal-draft"></div>
 
       <div class="modal-actions">
+        <button class="btn btn-gmail" onclick="openInGmail()">פתח בג'ימייל ושלח</button>
         <button class="btn btn-copy" onclick="copyDraft()">העתק טיוטה</button>
         <button class="btn btn-done" onclick="markAsDone()">סמן כטופל ומחק</button>
         <button class="btn btn-close" onclick="closeModal()">סגור</button>
@@ -244,6 +403,56 @@
 
     let currentEmail = null;
     const urgencyOrder = { high: 1, medium: 2, low: 3 };
+
+    /* ---------- AUTH ---------- */
+
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) showDashboard(session.user);
+      else showLogin();
+    }
+
+    function showLogin() {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    function showDashboard(user) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('user-info').textContent = `מחובר/ת כ־${user.email}`;
+      loadEmails();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errBox = document.getElementById('login-error');
+      const btn = document.getElementById('login-btn');
+      errBox.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'מתחבר...';
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      btn.disabled = false;
+      btn.textContent = 'התחבר';
+
+      if (error) {
+        errBox.textContent = 'שגיאה בהתחברות: ' + error.message;
+        errBox.style.display = 'block';
+      }
+    });
+
+    window.signOut = async function () { await supabase.auth.signOut(); };
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) showDashboard(session.user);
+      else if (event === 'SIGNED_OUT') showLogin();
+    });
+
+    /* ---------- HELPERS ---------- */
 
     function urgencyRank(level) {
       return urgencyOrder[(level || '').toLowerCase()] || 99;
@@ -281,6 +490,15 @@
       setTimeout(() => t.classList.remove('show'), 2000);
     }
 
+    function updateStats(total, high, medium, low) {
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-high').textContent = high;
+      document.getElementById('stat-medium').textContent = medium;
+      document.getElementById('stat-low').textContent = low;
+    }
+
+    /* ---------- LOAD EMAILS ---------- */
+
     window.loadEmails = async function () {
       const content = document.getElementById('content');
       content.innerHTML = '<div class="loading-state"><div class="icon">⏳</div>טוען מיילים...</div>';
@@ -289,31 +507,33 @@
 
       if (error) {
         content.innerHTML = `<div class="error-state"><div class="icon">⚠️</div>שגיאה בטעינה: ${escapeHtml(error.message)}</div>`;
-        document.getElementById('stats').textContent = '';
-        return;
-      }
-      if (!data || data.length === 0) {
-        content.innerHTML = '<div class="empty-state"><div class="icon">📭</div>אין מיילים בתיבה<br><small>כשמייל חדש יגיע, הוא יופיע כאן אוטומטית.</small></div>';
-        document.getElementById('stats').textContent = '0 מיילים';
+        updateStats(0, 0, 0, 0);
         return;
       }
 
-      const sorted = [...data].sort((a, b) => {
+      const all = data || [];
+      const highCount = all.filter(e => urgencyRank(e.urgency_level) === 1).length;
+      const medCount  = all.filter(e => urgencyRank(e.urgency_level) === 2).length;
+      const lowCount  = all.filter(e => urgencyRank(e.urgency_level) === 3).length;
+      updateStats(all.length, highCount, medCount, lowCount);
+
+      if (all.length === 0) {
+        content.innerHTML = '<div class="empty-state"><div class="icon">📭</div>אין מיילים בתיבה<br><small>כשמייל חדש יגיע, הוא יופיע כאן אוטומטית.</small></div>';
+        return;
+      }
+
+      const sorted = [...all].sort((a, b) => {
         const r = urgencyRank(a.urgency_level) - urgencyRank(b.urgency_level);
         if (r !== 0) return r;
         return new Date(b.created_at || 0) - new Date(a.created_at || 0);
       });
-
-      const highCount = sorted.filter(e => urgencyRank(e.urgency_level) === 1).length;
-      document.getElementById('stats').textContent =
-        `${sorted.length} מיילים${highCount > 0 ? ` · ${highCount} בדחיפות גבוהה` : ''}`;
 
       content.innerHTML = `
         <table>
           <thead>
             <tr>
               <th>דחיפות</th>
-              <th>סטודנט</th>
+              <th>סטודנט/ית</th>
               <th>סוג שולח</th>
               <th>סיווג</th>
               <th>תקציר</th>
@@ -343,6 +563,8 @@
       });
     };
 
+    /* ---------- MODAL ---------- */
+
     window.openModal = function (email) {
       currentEmail = email;
       document.getElementById('modal-title').textContent = email.student_name || 'ללא שם';
@@ -366,10 +588,19 @@
       if (!currentEmail) return;
       try {
         await navigator.clipboard.writeText(currentEmail.draft_reply || '');
-        showToast('הטיוטה הועתקה');
+        showToast('הטיוטה הועתקה ללוח');
       } catch {
         showToast('שגיאה בהעתקה');
       }
+    };
+
+    window.openInGmail = function () {
+      if (!currentEmail) return;
+      const body    = encodeURIComponent(currentEmail.draft_reply || '');
+      const to      = encodeURIComponent(currentEmail.student_email || '');
+      const subject = encodeURIComponent('תשובה: ' + String(currentEmail.summary || '').slice(0, 60));
+      const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+      window.open(url, '_blank');
     };
 
     window.markAsDone = async function () {
@@ -403,7 +634,7 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    loadEmails();
+    checkAuth();
   </script>
 </body>
 </html>

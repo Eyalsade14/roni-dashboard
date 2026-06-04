@@ -62,10 +62,7 @@
       direction: ltr;
       text-align: right;
     }
-    .form-group input:focus {
-      outline: none;
-      border-color: #3b82f6;
-    }
+    .form-group input:focus { outline: none; border-color: #3b82f6; }
     .login-btn {
       width: 100%;
       background: #3b82f6;
@@ -93,7 +90,7 @@
     /* Dashboard */
     #dashboard {
       display: none;
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -194,11 +191,11 @@
     .badge-low    { background: #f0fdf4; color: #16a34a; }
     .badge-other  { background: #f3f4f6; color: #4b5563; }
 
-    .summary-cell {
-      max-width: 380px;
-      color: #4b5563;
-      line-height: 1.5;
-    }
+    .summary-cell { max-width: 340px; color: #4b5563; line-height: 1.5; }
+    .waiting-cell { white-space: nowrap; font-weight: 700; }
+    .waiting-fresh { color: #16a34a; }
+    .waiting-warm  { color: #d97706; }
+    .waiting-old   { color: #dc2626; }
 
     .empty-state, .loading-state, .error-state {
       background: white;
@@ -212,6 +209,7 @@
       font-size: 48px;
       margin-bottom: 16px;
     }
+    .empty-state small { display: block; margin-top: 8px; }
 
     /* Modal */
     .modal-backdrop {
@@ -254,16 +252,25 @@
       line-height: 1.6;
       font-size: 14px;
     }
-    .modal .draft {
+    .modal textarea.draft {
+      width: 100%;
       background: #f9fafb;
       padding: 16px;
       border-radius: 8px;
-      white-space: pre-wrap;
       font-size: 14px;
       line-height: 1.7;
+      min-height: 220px;
       max-height: 400px;
-      overflow-y: auto;
       border: 1px solid #e5e7eb;
+      font-family: inherit;
+      resize: vertical;
+      direction: rtl;
+      text-align: right;
+    }
+    .modal textarea.draft:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: white;
     }
     .modal-actions {
       display: flex;
@@ -281,14 +288,22 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .btn-gmail { background: #ea4335; color: white; }
-    .btn-gmail:hover { background: #c5221f; }
-    .btn-done  { background: #16a34a; color: white; }
-    .btn-done:hover  { background: #15803d; }
-    .btn-close { background: #e5e7eb; color: #374151; }
-    .btn-close:hover { background: #d1d5db; }
-    .btn-copy  { background: #3b82f6; color: white; }
-    .btn-copy:hover  { background: #2563eb; }
+    .btn-gmail   { background: #ea4335; color: white; }
+    .btn-gmail:hover   { background: #c5221f; }
+    .btn-done    { background: #16a34a; color: white; }
+    .btn-done:hover    { background: #15803d; }
+    .btn-close   { background: #e5e7eb; color: #374151; }
+    .btn-close:hover   { background: #d1d5db; }
+    .btn-copy    { background: #3b82f6; color: white; }
+    .btn-copy:hover    { background: #2563eb; }
+    .btn-rewrite { background: #8b5cf6; color: white; }
+    .btn-rewrite:hover { background: #7c3aed; }
+
+    /* Confirm modal */
+    #confirm-modal .modal { max-width: 420px; text-align: center; }
+    #confirm-modal h2 { margin-bottom: 8px; }
+    #confirm-modal p { color: #4b5563; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+    #confirm-modal .modal-actions { justify-content: center; margin-top: 0; }
 
     .toast {
       position: fixed;
@@ -343,7 +358,6 @@
       </div>
     </header>
 
-    <!-- Stats bar -->
     <div class="stats-bar">
       <div class="stat-card">
         <div class="stat-label">סה״כ ממתינים</div>
@@ -371,7 +385,7 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Email Modal -->
   <div class="modal-backdrop" id="modal">
     <div class="modal">
       <h2 id="modal-title"></h2>
@@ -380,14 +394,27 @@
       <div class="label">תקציר</div>
       <div class="summary-text" id="modal-summary"></div>
 
-      <div class="label">טיוטת תשובה</div>
-      <div class="draft" id="modal-draft"></div>
+      <div class="label">טיוטת תשובה (ניתנת לעריכה)</div>
+      <textarea class="draft" id="modal-draft" placeholder="כתבי כאן את התשובה..."></textarea>
 
       <div class="modal-actions">
         <button class="btn btn-gmail" onclick="openInGmail()">פתח בג'ימייל ושלח</button>
         <button class="btn btn-copy" onclick="copyDraft()">העתק טיוטה</button>
+        <button class="btn btn-rewrite" onclick="rewriteDraft()">נסח מחדש</button>
         <button class="btn btn-done" onclick="markAsDone()">סמן כטופל ומחק</button>
         <button class="btn btn-close" onclick="closeModal()">סגור</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-backdrop" id="confirm-modal">
+    <div class="modal">
+      <h2 id="confirm-title">אישור</h2>
+      <p id="confirm-message"></p>
+      <div class="modal-actions">
+        <button class="btn btn-done" id="confirm-yes">אישור</button>
+        <button class="btn btn-close" id="confirm-no">ביטול</button>
       </div>
     </div>
   </div>
@@ -403,6 +430,47 @@
 
     let currentEmail = null;
     const urgencyOrder = { high: 1, medium: 2, low: 3 };
+
+    /* ---------- HEBREW CUSTOM DIALOGS ---------- */
+
+    function customConfirm(message, title = 'אישור') {
+      return new Promise((resolve) => {
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        const modal = document.getElementById('confirm-modal');
+        const yes = document.getElementById('confirm-yes');
+        const no  = document.getElementById('confirm-no');
+        modal.classList.add('open');
+
+        const cleanup = (val) => {
+          modal.classList.remove('open');
+          yes.onclick = null;
+          no.onclick = null;
+          resolve(val);
+        };
+        yes.onclick = () => cleanup(true);
+        no.onclick  = () => cleanup(false);
+      });
+    }
+
+    function customAlert(message, title = 'הודעה') {
+      return new Promise((resolve) => {
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-message').textContent = message;
+        const modal = document.getElementById('confirm-modal');
+        const yes = document.getElementById('confirm-yes');
+        const no  = document.getElementById('confirm-no');
+        yes.textContent = 'אישור';
+        no.style.display = 'none';
+        modal.classList.add('open');
+        yes.onclick = () => {
+          modal.classList.remove('open');
+          no.style.display = '';
+          yes.onclick = null;
+          resolve();
+        };
+      });
+    }
 
     /* ---------- AUTH ---------- */
 
@@ -440,7 +508,7 @@
       btn.textContent = 'התחבר';
 
       if (error) {
-        errBox.textContent = 'שגיאה בהתחברות: ' + error.message;
+        errBox.textContent = 'שגיאה בהתחברות. בדוק שהאימייל והסיסמה נכונים.';
         errBox.style.display = 'block';
       }
     });
@@ -463,7 +531,7 @@
       if (l === 'high')   return '<span class="badge badge-high">גבוהה</span>';
       if (l === 'medium') return '<span class="badge badge-medium">בינונית</span>';
       if (l === 'low')    return '<span class="badge badge-low">נמוכה</span>';
-      return `<span class="badge badge-other">${escapeHtml(level || '—')}</span>`;
+      return `<span class="badge badge-other">${escapeHtml(level || 'לא מסווג')}</span>`;
     }
 
     function escapeHtml(str) {
@@ -481,6 +549,24 @@
           hour: '2-digit', minute: '2-digit'
         });
       } catch { return '—'; }
+    }
+
+    function waitingTime(iso) {
+      if (!iso) return { text: '—', cls: '' };
+      const now  = new Date();
+      const then = new Date(iso);
+      const diffMin = Math.floor((now - then) / 60000);
+
+      if (diffMin < 1)   return { text: 'עכשיו',          cls: 'waiting-fresh' };
+      if (diffMin < 60)  return { text: `${diffMin} דק׳`, cls: 'waiting-fresh' };
+
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) {
+        const cls = diffHr < 4 ? 'waiting-fresh' : (diffHr < 12 ? 'waiting-warm' : 'waiting-old');
+        return { text: `${diffHr} שע׳`, cls };
+      }
+      const diffDay = Math.floor(diffHr / 24);
+      return { text: `${diffDay} ימים`, cls: 'waiting-old' };
     }
 
     function showToast(msg) {
@@ -506,7 +592,7 @@
       const { data, error } = await supabase.from('emails').select('*');
 
       if (error) {
-        content.innerHTML = `<div class="error-state"><div class="icon">⚠️</div>שגיאה בטעינה: ${escapeHtml(error.message)}</div>`;
+        content.innerHTML = `<div class="error-state"><div class="icon">⚠️</div>שגיאה בטעינת המיילים. נסי לרענן.</div>`;
         updateStats(0, 0, 0, 0);
         return;
       }
@@ -518,7 +604,7 @@
       updateStats(all.length, highCount, medCount, lowCount);
 
       if (all.length === 0) {
-        content.innerHTML = '<div class="empty-state"><div class="icon">📭</div>אין מיילים בתיבה<br><small>כשמייל חדש יגיע, הוא יופיע כאן אוטומטית.</small></div>';
+        content.innerHTML = '<div class="empty-state"><div class="icon">📭</div>אין מיילים בתיבה<small>כשמייל חדש יגיע, הוא יופיע כאן אוטומטית.</small></div>';
         return;
       }
 
@@ -538,19 +624,24 @@
               <th>סיווג</th>
               <th>תקציר</th>
               <th>התקבל</th>
+              <th>המתנה</th>
             </tr>
           </thead>
           <tbody>
-            ${sorted.map((e, i) => `
-              <tr class="email-row" data-idx="${i}">
-                <td>${urgencyBadge(e.urgency_level)}</td>
-                <td>${escapeHtml(e.student_name || '—')}</td>
-                <td>${escapeHtml(e.sender_type || '—')}</td>
-                <td>${escapeHtml(e.classification || '—')}</td>
-                <td class="summary-cell">${escapeHtml(e.summary || '')}</td>
-                <td>${formatDate(e.created_at)}</td>
-              </tr>
-            `).join('')}
+            ${sorted.map((e, i) => {
+              const wait = waitingTime(e.created_at);
+              return `
+                <tr class="email-row" data-idx="${i}">
+                  <td>${urgencyBadge(e.urgency_level)}</td>
+                  <td>${escapeHtml(e.student_name || '—')}</td>
+                  <td>${escapeHtml(e.sender_type || '—')}</td>
+                  <td>${escapeHtml(e.classification || '—')}</td>
+                  <td class="summary-cell">${escapeHtml(e.summary || '')}</td>
+                  <td>${formatDate(e.created_at)}</td>
+                  <td class="waiting-cell ${wait.cls}">${wait.text}</td>
+                </tr>
+              `;
+            }).join('')}
           </tbody>
         </table>
       `;
@@ -568,14 +659,15 @@
     window.openModal = function (email) {
       currentEmail = email;
       document.getElementById('modal-title').textContent = email.student_name || 'ללא שם';
+      const wait = waitingTime(email.created_at);
       document.getElementById('modal-meta').innerHTML = `
         ${urgencyBadge(email.urgency_level)}
-        <span class="badge badge-other">${escapeHtml(email.classification || '—')}</span>
-        <span class="badge badge-other">${escapeHtml(email.sender_type || '—')}</span>
-        <span class="badge badge-other">${formatDate(email.created_at)}</span>
+        <span class="badge badge-other">${escapeHtml(email.classification || 'לא מסווג')}</span>
+        <span class="badge badge-other">${escapeHtml(email.sender_type || 'לא ידוע')}</span>
+        <span class="badge badge-other">המתין ${wait.text}</span>
       `;
-      document.getElementById('modal-summary').textContent = email.summary || '—';
-      document.getElementById('modal-draft').textContent = email.draft_reply || '(אין טיוטה)';
+      document.getElementById('modal-summary').textContent = email.summary || 'אין תקציר';
+      document.getElementById('modal-draft').value = email.draft_reply || '';
       document.getElementById('modal').classList.add('open');
     };
 
@@ -585,18 +677,26 @@
     };
 
     window.copyDraft = async function () {
-      if (!currentEmail) return;
+      const text = document.getElementById('modal-draft').value;
       try {
-        await navigator.clipboard.writeText(currentEmail.draft_reply || '');
+        await navigator.clipboard.writeText(text);
         showToast('הטיוטה הועתקה ללוח');
       } catch {
         showToast('שגיאה בהעתקה');
       }
     };
 
+    window.rewriteDraft = function () {
+      const textarea = document.getElementById('modal-draft');
+      textarea.value = '';
+      textarea.focus();
+      showToast('הטיוטה נמחקה — אפשר לכתוב מחדש');
+    };
+
     window.openInGmail = function () {
       if (!currentEmail) return;
-      const body    = encodeURIComponent(currentEmail.draft_reply || '');
+      const text    = document.getElementById('modal-draft').value;
+      const body    = encodeURIComponent(text);
       const to      = encodeURIComponent(currentEmail.student_email || '');
       const subject = encodeURIComponent('תשובה: ' + String(currentEmail.summary || '').slice(0, 60));
       const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
@@ -605,7 +705,8 @@
 
     window.markAsDone = async function () {
       if (!currentEmail) return;
-      if (!confirm('למחוק את המייל מהרשימה? פעולה זו אינה הפיכה.')) return;
+      const ok = await customConfirm('האם למחוק את המייל מהרשימה? פעולה זו אינה הפיכה.', 'סימון כטופל');
+      if (!ok) return;
 
       let query = supabase.from('emails').delete();
       if (currentEmail.id !== undefined && currentEmail.id !== null) {
@@ -619,7 +720,7 @@
 
       const { error } = await query;
       if (error) {
-        alert('שגיאה במחיקה: ' + error.message);
+        await customAlert('שגיאה במחיקת המייל. נסי שוב.', 'שגיאה');
         return;
       }
       closeModal();
@@ -631,7 +732,10 @@
       if (e.target.id === 'modal') closeModal();
     });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+        document.getElementById('confirm-modal').classList.remove('open');
+      }
     });
 
     checkAuth();

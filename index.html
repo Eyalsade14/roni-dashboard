@@ -400,7 +400,6 @@
       <div class="modal-actions">
         <button class="btn btn-gmail" onclick="openInGmail()">פתח בג'ימייל ושלח</button>
         <button class="btn btn-copy" onclick="copyDraft()">העתק טיוטה</button>
-        <button class="btn btn-rewrite" onclick="rewriteDraft()">נסח מחדש</button>
         <button class="btn btn-done" onclick="markAsDone()">סמן כטופל ומחק</button>
         <button class="btn btn-close" onclick="closeModal()">סגור</button>
       </div>
@@ -526,6 +525,17 @@
       return urgencyOrder[(level || '').toLowerCase()] || 99;
     }
 
+    const senderTypeMap = {
+      student: 'סטודנט',
+      colleague: 'מרצה',
+      administration: 'הנהלה',
+      other: 'אחר',
+    };
+    function senderTypeHebrew(type) {
+      if (!type) return '—';
+      return senderTypeMap[String(type).toLowerCase().trim()] || type;
+    }
+
     function urgencyBadge(level) {
       const l = (level || '').toLowerCase();
       if (l === 'high')   return '<span class="badge badge-high">גבוהה</span>';
@@ -634,7 +644,7 @@
                 <tr class="email-row" data-idx="${i}">
                   <td>${urgencyBadge(e.urgency_level)}</td>
                   <td>${escapeHtml(e.student_name || '—')}</td>
-                  <td>${escapeHtml(e.sender_type || '—')}</td>
+                  <td>${escapeHtml(senderTypeHebrew(e.sender_type))}</td>
                   <td>${escapeHtml(e.classification || '—')}</td>
                   <td class="summary-cell">${escapeHtml(e.summary || '')}</td>
                   <td>${formatDate(e.created_at)}</td>
@@ -663,7 +673,7 @@
       document.getElementById('modal-meta').innerHTML = `
         ${urgencyBadge(email.urgency_level)}
         <span class="badge badge-other">${escapeHtml(email.classification || 'לא מסווג')}</span>
-        <span class="badge badge-other">${escapeHtml(email.sender_type || 'לא ידוע')}</span>
+        <span class="badge badge-other">${escapeHtml(senderTypeHebrew(email.sender_type))}</span>
         <span class="badge badge-other">המתין ${wait.text}</span>
       `;
       document.getElementById('modal-summary').textContent = email.summary || 'אין תקציר';
@@ -684,13 +694,6 @@
       } catch {
         showToast('שגיאה בהעתקה');
       }
-    };
-
-    window.rewriteDraft = function () {
-      const textarea = document.getElementById('modal-draft');
-      textarea.value = '';
-      textarea.focus();
-      showToast('הטיוטה נמחקה — אפשר לכתוב מחדש');
     };
 
     window.openInGmail = function () {

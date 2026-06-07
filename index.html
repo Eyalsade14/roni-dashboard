@@ -536,6 +536,22 @@
       return senderTypeMap[String(type).toLowerCase().trim()] || type;
     }
 
+    const classificationMap = {
+      absence_notification: 'היעדרות',
+      grade_question: 'שאלת ציון',
+      assignment_help: 'עזרה במטלה',
+      system_alert: 'התראת מערכת',
+      system_notification: 'הודעת מערכת',
+      system_error_notification: 'שגיאת מערכת',
+      spam_or_malformed: 'ספאם',
+      technical_issue: 'תקלה טכנית',
+      test: 'בדיקה',
+    };
+    function classificationHebrew(c) {
+      if (!c) return '—';
+      return classificationMap[String(c).toLowerCase().trim()] || c;
+    }
+
     function urgencyBadge(level) {
       const l = (level || '').toLowerCase();
       if (l === 'high')   return '<span class="badge badge-high">גבוהה</span>';
@@ -629,7 +645,6 @@
           <thead>
             <tr>
               <th>דחיפות</th>
-              <th>סטודנט/ית</th>
               <th>סוג שולח</th>
               <th>סיווג</th>
               <th>תקציר</th>
@@ -643,9 +658,8 @@
               return `
                 <tr class="email-row" data-idx="${i}">
                   <td>${urgencyBadge(e.urgency_level)}</td>
-                  <td>${escapeHtml(e.student_name || '—')}</td>
                   <td>${escapeHtml(senderTypeHebrew(e.sender_type))}</td>
-                  <td>${escapeHtml(e.classification || '—')}</td>
+                  <td>${escapeHtml(classificationHebrew(e.classification))}</td>
                   <td class="summary-cell">${escapeHtml(e.summary || '')}</td>
                   <td>${formatDate(e.created_at)}</td>
                   <td class="waiting-cell ${wait.cls}">${wait.text}</td>
@@ -672,7 +686,7 @@
       const wait = waitingTime(email.created_at);
       document.getElementById('modal-meta').innerHTML = `
         ${urgencyBadge(email.urgency_level)}
-        <span class="badge badge-other">${escapeHtml(email.classification || 'לא מסווג')}</span>
+        <span class="badge badge-other">${escapeHtml(classificationHebrew(email.classification) || 'לא מסווג')}</span>
         <span class="badge badge-other">${escapeHtml(senderTypeHebrew(email.sender_type))}</span>
         <span class="badge badge-other">המתין ${wait.text}</span>
       `;

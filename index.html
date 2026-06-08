@@ -635,8 +635,6 @@
       }
 
       const sorted = [...all].sort((a, b) => {
-        const r = urgencyRank(a.urgency_level) - urgencyRank(b.urgency_level);
-        if (r !== 0) return r;
         return new Date(b.created_at || 0) - new Date(a.created_at || 0);
       });
 

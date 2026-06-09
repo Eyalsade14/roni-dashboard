@@ -1155,10 +1155,13 @@
 
     window.openInGmail = function () {
       if (!currentEmail) return;
-      const text    = document.getElementById('modal-draft').value;
-      const body    = encodeURIComponent(text);
+      const text = document.getElementById('modal-draft').value;
+      // RLE (U+202B) forces right-to-left direction in renderers that respect it.
+      // Prepending it to subject and body makes Gmail display them RTL.
+      const RLE = '‫';
+      const body    = encodeURIComponent(RLE + text);
       const to      = encodeURIComponent(currentEmail.student_email || '');
-      const subject = encodeURIComponent('תשובה: ' + String(currentEmail.summary || '').slice(0, 60));
+      const subject = encodeURIComponent(RLE + 'תשובה: ' + String(currentEmail.summary || '').slice(0, 60));
       const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
       window.open(url, '_blank');
     };

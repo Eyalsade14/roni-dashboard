@@ -430,33 +430,22 @@
       box-shadow: 0 0 0 3px var(--primary-soft);
     }
 
-    /* Hallucination warnings */
-    .warnings-box {
-      margin-top: 10px;
-      background: var(--warning-soft);
-      border: 1px solid var(--warning-border);
-      border-radius: 4px;
-      padding: 10px 12px;
+    /* Placeholder hint (subtle, informational) */
+    .placeholders-hint {
+      margin-top: 8px;
       font-size: 0.8125rem;
-      color: #92400E;
+      color: var(--text-secondary);
       display: none;
     }
-    .warnings-box.show { display: block; }
-    .warnings-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .warnings-list {
-      margin: 0;
-      padding-inline-start: 18px;
-      line-height: 1.6;
-    }
-    .warnings-list code {
-      background: rgba(255,255,255,0.6);
-      padding: 1px 5px;
+    .placeholders-hint.show { display: block; }
+    .placeholders-hint code {
+      background: var(--bg);
+      padding: 1px 6px;
       border-radius: 3px;
-      font-family: 'Inter', monospace;
+      font-family: inherit;
       font-size: 0.8125rem;
+      color: var(--text);
+      margin-inline-end: 4px;
     }
 
     /* Original email panel */
@@ -631,9 +620,9 @@
       <div class="label">טיוטת תשובה</div>
       <textarea class="draft" id="modal-draft" placeholder="כתוב/י כאן את התשובה..."></textarea>
 
-      <div class="warnings-box" id="warnings-box">
-        <div class="warnings-title">נא לאמת פרטים אלה לפני השליחה:</div>
-        <ul class="warnings-list" id="warnings-list"></ul>
+      <div class="placeholders-hint" id="placeholders-hint">
+        <span id="placeholders-list"></span>
+        <span style="color: var(--text-muted);"> — פרטים להשלמה ידנית</span>
       </div>
 
       <div class="original-panel" id="original-panel"></div>
@@ -852,67 +841,37 @@
       return row.original_email || row.email_body || row.body || null;
     }
 
-    /* ---------- HALLUCINATION DETECTION ---------- */
-    // Returns array of suspicious patterns found in the draft.
-    function detectPlaceholders(text, originalEmail) {
+    /* ---------- PLACEHOLDER DETECTION (informational) ----------
+       Claude is instructed to leave [bracketed] placeholders for any
+       detail it does not know. This function just surfaces them so
+       the lecturer sees a quick checklist of fields to fill in.
+    */
+    function detectPlaceholders(text) {
       if (!text) return [];
-      const findings = [];
-      const original = (originalEmail || '').toString();
-
-      // Pattern 1: bracket placeholders like [שעות קבלה] or [שם]
-      const bracketRe = /\[[^\]\n]{1,40}\]/g;
-      let match;
-      while ((match = bracketRe.exec(text)) !== null) {
-        findings.push({ snippet: match[0], reason: 'נראה כסמן מקום (placeholder).' });
-      }
-
-      // Pattern 2: explicit time ranges like 14:00-16:00 (only flag if NOT in original)
-      const timeRangeRe = /\b\d{1,2}:\d{2}\s*[-–—]\s*\d{1,2}:\d{2}\b/g;
-      while ((match = timeRangeRe.exec(text)) !== null) {
-        if (!original.includes(match[0])) {
-          findings.push({ snippet: match[0], reason: 'טווח שעות שלא הופיע במייל המקורי.' });
-        }
-      }
-
-      // Pattern 3: phone numbers (only flag if NOT in original)
-      const phoneRe = /\b0\d[-\s]?\d{7,8}\b/g;
-      while ((match = phoneRe.exec(text)) !== null) {
-        if (!original.includes(match[0])) {
-          findings.push({ snippet: match[0], reason: 'מספר טלפון שלא הופיע במייל המקורי.' });
-        }
-      }
-
-      // Pattern 4: room numbers like "חדר 312" or "בניין X חדר Y" (only if not in original)
-      const roomRe = /\bחדר\s+\d{1,4}[א-ת]?\b/g;
-      while ((match = roomRe.exec(text)) !== null) {
-        if (!original.includes(match[0])) {
-          findings.push({ snippet: match[0], reason: 'מספר חדר שלא הופיע במייל המקורי.' });
-        }
-      }
-
-      // Dedupe by snippet
+      const re = /\[[^\]\n]{1,60}\]/g;
+      const found = [];
       const seen = new Set();
-      return findings.filter(f => {
-        const k = f.snippet;
-        if (seen.has(k)) return false;
-        seen.add(k);
-        return true;
-      });
+      let match;
+      while ((match = re.exec(text)) !== null) {
+        if (!seen.has(match[0])) {
+          seen.add(match[0]);
+          found.push(match[0]);
+        }
+      }
+      return found;
     }
 
-    function renderWarnings(text, originalEmail) {
-      const box = document.getElementById('warnings-box');
-      const list = document.getElementById('warnings-list');
-      const findings = detectPlaceholders(text, originalEmail);
-      if (findings.length === 0) {
-        box.classList.remove('show');
+    function renderPlaceholders(text) {
+      const hint = document.getElementById('placeholders-hint');
+      const list = document.getElementById('placeholders-list');
+      const found = detectPlaceholders(text);
+      if (found.length === 0) {
+        hint.classList.remove('show');
         list.innerHTML = '';
         return;
       }
-      list.innerHTML = findings.map(f =>
-        `<li><code>${escapeHtml(f.snippet)}</code> — ${escapeHtml(f.reason)}</li>`
-      ).join('');
-      box.classList.add('show');
+      list.innerHTML = found.map(p => `<code>${escapeHtml(p)}</code>`).join('');
+      hint.classList.add('show');
     }
 
     /* ---------- SELECTION ---------- */
@@ -1110,7 +1069,7 @@
       draft.value = email.draft_reply || '';
 
       // Hallucination check
-      renderWarnings(draft.value, getOriginalEmail(email));
+      renderPlaceholders(draft.value, getOriginalEmail(email));
 
       // Original email panel (hidden initially)
       const panel = document.getElementById('original-panel');
@@ -1124,7 +1083,7 @@
     // Re-check warnings on edit
     document.getElementById('modal-draft').addEventListener('input', (e) => {
       const original = currentEmail ? getOriginalEmail(currentEmail) : null;
-      renderWarnings(e.target.value, original);
+      renderPlaceholders(e.target.value, original);
     });
 
     window.toggleOriginal = function () {

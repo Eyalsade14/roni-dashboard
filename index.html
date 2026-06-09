@@ -3,36 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>תיבת המייל של רוני</title>
+  <title>ESCOPIC — תיבת המייל</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #FAFAFA;
+      --bg: #F8F9FA;
       --surface: #FFFFFF;
-      --text: #18181B;
-      --text-secondary: #52525B;
-      --text-muted: #A1A1AA;
-      --border: #E4E4E7;
-      --border-subtle: #F4F4F5;
-      --accent: #5B5BD6;
-      --accent-hover: #4F46E5;
-      --accent-soft: #EEF2FF;
+      --primary: #1B3A5C;
+      --primary-hover: #142C45;
+      --primary-soft: #EEF2F7;
+      --text: #111827;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --border: #E5E7EB;
+      --border-subtle: #F3F4F6;
       --danger: #DC2626;
-      --warning: #D97706;
+      --danger-soft: #FEF2F2;
       --success: #16A34A;
+      --warning: #D97706;
+      --warning-soft: #FFFBEB;
+      --warning-border: #FCD34D;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    *::selection { background: var(--accent-soft); color: var(--text); }
+    *::selection { background: var(--primary-soft); color: var(--text); }
 
     body {
-      font-family: 'Heebo', -apple-system, system-ui, sans-serif;
+      font-family: 'Inter', 'Heebo', -apple-system, system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -49,26 +53,34 @@
     .login-box {
       background: var(--surface);
       padding: 40px 36px;
-      border-radius: 12px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       max-width: 380px;
       width: 100%;
     }
+    .login-brand {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
     .login-box h1 {
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 600;
       margin-bottom: 4px;
-      letter-spacing: -0.01em;
     }
     .login-box .subtitle {
       color: var(--text-muted);
       margin-bottom: 28px;
-      font-size: 13px;
+      font-size: 0.8125rem;
     }
     .form-group { margin-bottom: 14px; }
     .form-group label {
       display: block;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-secondary);
       margin-bottom: 6px;
@@ -77,9 +89,9 @@
       width: 100%;
       padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 14px;
+      font-size: 0.875rem;
       background: var(--surface);
       direction: ltr;
       text-align: right;
@@ -87,31 +99,31 @@
     }
     .form-group input:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
     .login-btn {
       width: 100%;
-      background: var(--accent);
+      background: var(--primary);
       color: white;
-      border: none;
+      border: 1px solid var(--primary);
       padding: 10px;
       border-radius: 6px;
       font-family: inherit;
       font-weight: 500;
-      font-size: 14px;
+      font-size: 0.875rem;
       cursor: pointer;
       margin-top: 8px;
       transition: background 0.15s;
     }
-    .login-btn:hover:not(:disabled) { background: var(--accent-hover); }
+    .login-btn:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
     .login-btn:disabled { opacity: 0.6; cursor: wait; }
     .login-error {
-      background: #FEF2F2;
+      background: var(--danger-soft);
       color: var(--danger);
       padding: 10px 12px;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 4px;
+      font-size: 0.8125rem;
       margin-bottom: 16px;
       border: 1px solid #FECACA;
     }
@@ -119,31 +131,51 @@
     /* ============ DASHBOARD ============ */
     #dashboard {
       display: none;
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 32px 28px;
+      padding: 28px;
+    }
+    @media (max-width: 768px) {
+      #dashboard { padding: 16px; }
     }
     header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       gap: 16px;
       flex-wrap: wrap;
     }
+    .brand-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-mark {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
     h1 {
-      font-size: 20px;
+      font-size: 1.25rem;
       font-weight: 600;
       letter-spacing: -0.01em;
-      margin-bottom: 2px;
     }
     .user-info {
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 0.8125rem;
+      margin-top: 4px;
     }
-    .header-actions { display: flex; gap: 6px; }
-    .header-btn {
-      background: transparent;
+    .header-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-header {
+      background: var(--surface);
       color: var(--text-secondary);
       border: 1px solid var(--border);
       padding: 7px 14px;
@@ -151,30 +183,30 @@
       font-family: inherit;
       font-weight: 500;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 0.8125rem;
       transition: all 0.15s;
     }
-    .header-btn:hover {
-      background: var(--surface);
+    .btn-header:hover {
       color: var(--text);
       border-color: var(--text-muted);
     }
-    .header-btn.primary {
-      background: var(--accent);
+    .btn-header.danger {
+      background: var(--danger);
       color: white;
-      border-color: var(--accent);
+      border-color: var(--danger);
     }
-    .header-btn.primary:hover {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
+    .btn-header.danger:hover {
+      background: #B91C1C;
+      border-color: #B91C1C;
+      color: white;
     }
 
     /* ============ STATS BAR ============ */
     .stats-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 28px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
     @media (max-width: 640px) {
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
@@ -182,46 +214,35 @@
     .stat-card {
       background: var(--surface);
       padding: 16px 18px;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      transition: border-color 0.15s;
+      box-shadow: var(--shadow-sm);
     }
-    .stat-card:hover { border-color: var(--text-muted); }
     .stat-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       margin-bottom: 8px;
     }
     .stat-value {
-      font-size: 28px;
-      font-weight: 500;
+      font-size: 1.75rem;
+      font-weight: 600;
       line-height: 1;
       letter-spacing: -0.02em;
       color: var(--text);
     }
-
-    /* Status dots (used in stats labels and table) */
-    .dot {
-      display: inline-block;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .dot-high   { background: var(--danger); }
-    .dot-medium { background: var(--warning); }
-    .dot-low    { background: var(--success); }
-    .dot-other  { background: var(--text-muted); }
+    .stat-value.high   { color: var(--danger); }
+    .stat-value.medium { color: var(--warning); }
+    .stat-value.low    { color: var(--success); }
 
     /* ============ TABLE ============ */
     .table-wrapper {
       background: var(--surface);
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
     }
     table {
@@ -230,20 +251,20 @@
     }
     th {
       background: transparent;
-      padding: 10px 16px;
+      padding: 11px 16px;
       text-align: right;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
     td {
-      padding: 12px 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border-subtle);
-      font-size: 14px;
+      font-size: 0.875rem;
       vertical-align: middle;
       color: var(--text);
     }
@@ -253,13 +274,34 @@
     }
     tr.email-row:hover { background: var(--bg); }
     tr.email-row:last-child td { border-bottom: none; }
+    tr.email-row.selected { background: var(--primary-soft); }
+    tr.email-row.selected:hover { background: var(--primary-soft); }
 
-    .urgency-cell {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
+    /* Checkbox column */
+    .checkbox-cell {
+      width: 36px;
+      padding-inline: 16px;
+      padding-inline-start: 16px;
+      padding-inline-end: 0;
     }
+    .row-check, .header-check {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--primary);
+      vertical-align: middle;
+    }
+
+    /* Priority — text only, colored */
+    .priority {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .priority.high   { color: var(--danger); }
+    .priority.medium { color: var(--warning); }
+    .priority.low    { color: var(--success); }
+    .priority.other  { color: var(--text-muted); }
+
     .summary-cell {
       max-width: 380px;
       color: var(--text-secondary);
@@ -275,31 +317,30 @@
     }
     .waiting-warm { color: var(--warning); }
     .waiting-old  { color: var(--danger); }
-
     .date-cell {
       color: var(--text-muted);
       font-variant-numeric: tabular-nums;
-      font-size: 13px;
+      font-size: 0.8125rem;
     }
-
-    .text-muted { color: var(--text-muted); }
+    .empty-value { color: var(--text-muted); font-style: italic; }
 
     /* ============ EMPTY/LOADING/ERROR ============ */
     .empty-state, .loading-state, .error-state {
       background: var(--surface);
       padding: 72px 24px;
       text-align: center;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
     .state-title {
-      font-size: 15px;
-      font-weight: 500;
+      font-size: 0.9375rem;
+      font-weight: 600;
       color: var(--text);
       margin-bottom: 6px;
     }
     .state-desc {
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--text-muted);
     }
     .error-state .state-title { color: var(--danger); }
@@ -308,7 +349,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(24,24,27,0.5);
+      background: rgba(17, 24, 39, 0.4);
       backdrop-filter: blur(2px);
       display: none;
       align-items: flex-start;
@@ -320,8 +361,9 @@
     .modal-backdrop.open { display: flex; }
     .modal {
       background: var(--surface);
-      border-radius: 10px;
+      border-radius: 6px;
       border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       max-width: 680px;
       width: 100%;
       padding: 28px;
@@ -332,7 +374,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .modal h2 {
-      font-size: 17px;
+      font-size: 1.125rem;
       font-weight: 600;
       margin-bottom: 10px;
       letter-spacing: -0.01em;
@@ -342,36 +384,35 @@
       gap: 16px;
       margin-bottom: 24px;
       flex-wrap: wrap;
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--text-secondary);
       padding-bottom: 18px;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .modal .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .modal .meta-item { display: flex; align-items: center; gap: 6px; }
+    .meta-item.high   { color: var(--danger); font-weight: 600; }
+    .meta-item.medium { color: var(--warning); font-weight: 600; }
+    .meta-item.low    { color: var(--success); font-weight: 600; }
     .modal .label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
       margin-top: 18px;
       margin-bottom: 8px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
     .modal .summary-text {
       color: var(--text-secondary);
       line-height: 1.6;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
     .modal textarea.draft {
       width: 100%;
       background: var(--surface);
       padding: 14px;
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: 4px;
+      font-size: 0.9375rem;
       line-height: 1.7;
       min-height: 220px;
       max-height: 400px;
@@ -385,9 +426,60 @@
     }
     .modal textarea.draft:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
+
+    /* Hallucination warnings */
+    .warnings-box {
+      margin-top: 10px;
+      background: var(--warning-soft);
+      border: 1px solid var(--warning-border);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-size: 0.8125rem;
+      color: #92400E;
+      display: none;
+    }
+    .warnings-box.show { display: block; }
+    .warnings-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .warnings-list {
+      margin: 0;
+      padding-inline-start: 18px;
+      line-height: 1.6;
+    }
+    .warnings-list code {
+      background: rgba(255,255,255,0.6);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Inter', monospace;
+      font-size: 0.8125rem;
+    }
+
+    /* Original email panel */
+    .original-panel {
+      margin-top: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+    }
+    .original-panel.show { display: block; }
+    .original-panel.empty {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
     .modal-actions {
       display: flex;
       gap: 8px;
@@ -402,40 +494,35 @@
       color: var(--text-secondary);
       font-family: inherit;
       font-weight: 500;
-      font-size: 13px;
+      font-size: 0.8125rem;
       cursor: pointer;
       transition: all 0.15s;
     }
-    .btn:hover {
-      color: var(--text);
-      border-color: var(--text-muted);
-    }
+    .btn:hover { color: var(--text); border-color: var(--text-muted); }
     .btn.primary {
-      background: var(--accent);
+      background: var(--primary);
       color: white;
-      border-color: var(--accent);
+      border-color: var(--primary);
     }
     .btn.primary:hover {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
       color: white;
     }
-    .btn.danger {
-      color: var(--danger);
-    }
+    .btn.danger { color: var(--danger); }
     .btn.danger:hover {
-      background: #FEF2F2;
+      background: var(--danger-soft);
       border-color: var(--danger);
       color: var(--danger);
     }
     .btn-spacer { flex: 1; }
 
     /* ============ CONFIRM ============ */
-    #confirm-modal .modal { max-width: 400px; }
+    #confirm-modal .modal { max-width: 420px; }
     #confirm-modal h2 { margin-bottom: 6px; }
     #confirm-modal p {
       color: var(--text-secondary);
-      font-size: 13px;
+      font-size: 0.8125rem;
       margin-bottom: 20px;
       line-height: 1.5;
     }
@@ -454,7 +541,7 @@
       color: white;
       padding: 9px 16px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 500;
       opacity: 0;
       pointer-events: none;
@@ -472,8 +559,9 @@
   <!-- Login Screen -->
   <div id="login-screen">
     <div class="login-box">
-      <h1>תיבת המייל של רוני</h1>
-      <div class="subtitle">נדרשת התחברות כדי לצפות</div>
+      <div class="login-brand">ESCOPIC</div>
+      <h1>תיבת המייל</h1>
+      <div class="subtitle">נדרשת התחברות כדי להמשיך</div>
       <div id="login-error" class="login-error" style="display:none;"></div>
       <form id="login-form">
         <div class="form-group">
@@ -492,13 +580,15 @@
   <!-- Main Dashboard -->
   <div id="dashboard">
     <header>
-      <div>
+      <div class="brand-stack">
+        <div class="brand-mark">ESCOPIC</div>
         <h1>תיבת המייל</h1>
         <div class="user-info" id="user-info"></div>
       </div>
       <div class="header-actions">
-        <button class="header-btn" onclick="loadEmails()">רענן</button>
-        <button class="header-btn" onclick="signOut()">יציאה</button>
+        <button class="btn-header danger" id="bulk-delete-btn" style="display:none;" onclick="bulkDelete()">מחק מסומנים (<span id="bulk-count">0</span>)</button>
+        <button class="btn-header" onclick="loadEmails()">רענן</button>
+        <button class="btn-header" onclick="signOut()">יציאה</button>
       </div>
     </header>
 
@@ -508,16 +598,16 @@
         <div class="stat-value" id="stat-total">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label"><span class="dot dot-high"></span>דחיפות גבוהה</div>
-        <div class="stat-value" id="stat-high">0</div>
+        <div class="stat-label">דחיפות גבוהה</div>
+        <div class="stat-value high" id="stat-high">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label"><span class="dot dot-medium"></span>דחיפות בינונית</div>
-        <div class="stat-value" id="stat-medium">0</div>
+        <div class="stat-label">דחיפות בינונית</div>
+        <div class="stat-value medium" id="stat-medium">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label"><span class="dot dot-low"></span>דחיפות נמוכה</div>
-        <div class="stat-value" id="stat-low">0</div>
+        <div class="stat-label">דחיפות נמוכה</div>
+        <div class="stat-value low" id="stat-low">0</div>
       </div>
     </div>
 
@@ -541,9 +631,17 @@
       <div class="label">טיוטת תשובה</div>
       <textarea class="draft" id="modal-draft" placeholder="כתוב/י כאן את התשובה..."></textarea>
 
+      <div class="warnings-box" id="warnings-box">
+        <div class="warnings-title">נא לאמת פרטים אלה לפני השליחה:</div>
+        <ul class="warnings-list" id="warnings-list"></ul>
+      </div>
+
+      <div class="original-panel" id="original-panel"></div>
+
       <div class="modal-actions">
         <button class="btn primary" onclick="openInGmail()">פתח בג'ימייל</button>
         <button class="btn" onclick="copyDraft()">העתק</button>
+        <button class="btn" id="toggle-original-btn" onclick="toggleOriginal()">צפה במייל המקורי</button>
         <div class="btn-spacer"></div>
         <button class="btn danger" onclick="markAsDone()">סמן כטופל</button>
         <button class="btn" onclick="closeModal()">סגור</button>
@@ -573,10 +671,13 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentEmail = null;
+    let originalVisible = false;
+    let allEmails = [];
+    const selectedIds = new Set();
     const urgencyOrder = { high: 1, medium: 2, low: 3 };
 
-    /* ---------- HEBREW CUSTOM DIALOGS ---------- */
-    function customConfirm(message, title = 'אישור') {
+    /* ---------- DIALOGS ---------- */
+    function customConfirm(message, title = 'אישור', confirmLabel = 'אישור') {
       return new Promise((resolve) => {
         document.getElementById('confirm-title').textContent = title;
         document.getElementById('confirm-message').textContent = message;
@@ -584,9 +685,8 @@
         const yes = document.getElementById('confirm-yes');
         const no  = document.getElementById('confirm-no');
         no.style.display = '';
-        yes.textContent = 'אישור';
+        yes.textContent = confirmLabel;
         modal.classList.add('open');
-
         const cleanup = (val) => {
           modal.classList.remove('open');
           yes.onclick = null;
@@ -623,19 +723,16 @@
       if (session) showDashboard(session.user);
       else showLogin();
     }
-
     function showLogin() {
       document.getElementById('login-screen').style.display = 'flex';
       document.getElementById('dashboard').style.display = 'none';
     }
-
     function showDashboard(user) {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       document.getElementById('user-info').textContent = user.email;
       loadEmails();
     }
-
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const errBox = document.getElementById('login-error');
@@ -643,39 +740,31 @@
       errBox.style.display = 'none';
       btn.disabled = true;
       btn.textContent = 'מתחבר...';
-
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-
       btn.disabled = false;
       btn.textContent = 'התחבר';
-
       if (error) {
         errBox.textContent = 'שגיאה בהתחברות. בדוק/י שהאימייל והסיסמה נכונים.';
         errBox.style.display = 'block';
       }
     });
-
     window.signOut = async function () { await supabase.auth.signOut(); };
-
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) showDashboard(session.user);
       else if (event === 'SIGNED_OUT') showLogin();
     });
 
-    /* ---------- HELPERS ---------- */
+    /* ---------- TRANSLATIONS ---------- */
     const senderTypeMap = {
-      student: 'סטודנט',
-      colleague: 'מרצה',
-      administration: 'הנהלה',
-      other: 'אחר',
+      student: 'סטודנט', colleague: 'מרצה',
+      administration: 'הנהלה', other: 'אחר',
     };
     function senderTypeHebrew(type) {
-      if (!type) return '—';
+      if (!type) return null;
       return senderTypeMap[String(type).toLowerCase().trim()] || type;
     }
-
     const classificationMap = {
       absence_notification: 'היעדרות',
       grade_question: 'שאלת ציון',
@@ -688,58 +777,50 @@
       test: 'בדיקה',
     };
     function classificationHebrew(c) {
-      if (!c) return '—';
+      if (!c) return null;
       return classificationMap[String(c).toLowerCase().trim()] || c;
     }
 
+    /* ---------- HELPERS ---------- */
     function urgencyRank(level) {
       return urgencyOrder[(level || '').toLowerCase()] || 99;
     }
-
-    function urgencyCell(level) {
+    function urgencyClass(level) {
       const l = (level || '').toLowerCase();
-      let dotClass = 'dot-other', label = level || 'לא ידוע';
-      if (l === 'high')   { dotClass = 'dot-high';   label = 'גבוהה'; }
-      else if (l === 'medium') { dotClass = 'dot-medium'; label = 'בינונית'; }
-      else if (l === 'low')    { dotClass = 'dot-low';    label = 'נמוכה'; }
-      return `<div class="urgency-cell"><span class="dot ${dotClass}"></span>${escapeHtml(label)}</div>`;
+      if (l === 'high')   return 'high';
+      if (l === 'medium') return 'medium';
+      if (l === 'low')    return 'low';
+      return 'other';
     }
-
-    function urgencyMeta(level) {
+    function urgencyLabel(level) {
       const l = (level || '').toLowerCase();
-      let dotClass = 'dot-other', label = level || 'לא ידוע';
-      if (l === 'high')   { dotClass = 'dot-high';   label = 'דחיפות גבוהה'; }
-      else if (l === 'medium') { dotClass = 'dot-medium'; label = 'דחיפות בינונית'; }
-      else if (l === 'low')    { dotClass = 'dot-low';    label = 'דחיפות נמוכה'; }
-      return `<div class="meta-item"><span class="dot ${dotClass}"></span>${escapeHtml(label)}</div>`;
+      if (l === 'high')   return 'גבוהה';
+      if (l === 'medium') return 'בינונית';
+      if (l === 'low')    return 'נמוכה';
+      return level || 'לא ידוע';
     }
-
     function escapeHtml(str) {
       if (str == null) return '';
       return String(str)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
-
     function formatDate(iso) {
-      if (!iso) return '—';
+      if (!iso) return null;
       try {
         return new Date(iso).toLocaleString('he-IL', {
           day: '2-digit', month: '2-digit',
           hour: '2-digit', minute: '2-digit'
         });
-      } catch { return '—'; }
+      } catch { return null; }
     }
-
     function waitingTime(iso) {
       if (!iso) return { text: '—', cls: '' };
       const now  = new Date();
       const then = new Date(iso);
       const diffMin = Math.floor((now - then) / 60000);
-
       if (diffMin < 1)   return { text: 'עכשיו',          cls: '' };
       if (diffMin < 60)  return { text: `${diffMin} דק׳`, cls: '' };
-
       const diffHr = Math.floor(diffMin / 60);
       if (diffHr < 24) {
         const cls = diffHr < 4 ? '' : (diffHr < 12 ? 'waiting-warm' : 'waiting-old');
@@ -748,7 +829,6 @@
       const diffDay = Math.floor(diffHr / 24);
       return { text: `${diffDay} ימים`, cls: 'waiting-old' };
     }
-
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -756,13 +836,149 @@
       clearTimeout(t._timer);
       t._timer = setTimeout(() => t.classList.remove('show'), 2200);
     }
-
     function updateStats(total, high, medium, low) {
       document.getElementById('stat-total').textContent = total;
       document.getElementById('stat-high').textContent = high;
       document.getElementById('stat-medium').textContent = medium;
       document.getElementById('stat-low').textContent = low;
     }
+    function valueOrEmpty(value, fallbackClass = 'empty-value', fallbackText = 'לא צוין') {
+      if (value === null || value === undefined || String(value).trim() === '') {
+        return `<span class="${fallbackClass}">${fallbackText}</span>`;
+      }
+      return escapeHtml(value);
+    }
+    function getOriginalEmail(row) {
+      return row.original_email || row.email_body || row.body || null;
+    }
+
+    /* ---------- HALLUCINATION DETECTION ---------- */
+    // Returns array of suspicious patterns found in the draft.
+    function detectPlaceholders(text, originalEmail) {
+      if (!text) return [];
+      const findings = [];
+      const original = (originalEmail || '').toString();
+
+      // Pattern 1: bracket placeholders like [שעות קבלה] or [שם]
+      const bracketRe = /\[[^\]\n]{1,40}\]/g;
+      let match;
+      while ((match = bracketRe.exec(text)) !== null) {
+        findings.push({ snippet: match[0], reason: 'נראה כסמן מקום (placeholder).' });
+      }
+
+      // Pattern 2: explicit time ranges like 14:00-16:00 (only flag if NOT in original)
+      const timeRangeRe = /\b\d{1,2}:\d{2}\s*[-–—]\s*\d{1,2}:\d{2}\b/g;
+      while ((match = timeRangeRe.exec(text)) !== null) {
+        if (!original.includes(match[0])) {
+          findings.push({ snippet: match[0], reason: 'טווח שעות שלא הופיע במייל המקורי.' });
+        }
+      }
+
+      // Pattern 3: phone numbers (only flag if NOT in original)
+      const phoneRe = /\b0\d[-\s]?\d{7,8}\b/g;
+      while ((match = phoneRe.exec(text)) !== null) {
+        if (!original.includes(match[0])) {
+          findings.push({ snippet: match[0], reason: 'מספר טלפון שלא הופיע במייל המקורי.' });
+        }
+      }
+
+      // Pattern 4: room numbers like "חדר 312" or "בניין X חדר Y" (only if not in original)
+      const roomRe = /\bחדר\s+\d{1,4}[א-ת]?\b/g;
+      while ((match = roomRe.exec(text)) !== null) {
+        if (!original.includes(match[0])) {
+          findings.push({ snippet: match[0], reason: 'מספר חדר שלא הופיע במייל המקורי.' });
+        }
+      }
+
+      // Dedupe by snippet
+      const seen = new Set();
+      return findings.filter(f => {
+        const k = f.snippet;
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
+    }
+
+    function renderWarnings(text, originalEmail) {
+      const box = document.getElementById('warnings-box');
+      const list = document.getElementById('warnings-list');
+      const findings = detectPlaceholders(text, originalEmail);
+      if (findings.length === 0) {
+        box.classList.remove('show');
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML = findings.map(f =>
+        `<li><code>${escapeHtml(f.snippet)}</code> — ${escapeHtml(f.reason)}</li>`
+      ).join('');
+      box.classList.add('show');
+    }
+
+    /* ---------- SELECTION ---------- */
+    function updateBulkUI() {
+      const btn = document.getElementById('bulk-delete-btn');
+      const count = document.getElementById('bulk-count');
+      const masterCheck = document.getElementById('header-check');
+      count.textContent = selectedIds.size;
+      btn.style.display = selectedIds.size > 0 ? '' : 'none';
+      if (masterCheck) {
+        const total = allEmails.length;
+        if (selectedIds.size === 0) {
+          masterCheck.checked = false;
+          masterCheck.indeterminate = false;
+        } else if (selectedIds.size === total) {
+          masterCheck.checked = true;
+          masterCheck.indeterminate = false;
+        } else {
+          masterCheck.checked = false;
+          masterCheck.indeterminate = true;
+        }
+      }
+      document.querySelectorAll('tr.email-row').forEach(row => {
+        const id = row.dataset.id;
+        if (selectedIds.has(id)) row.classList.add('selected');
+        else row.classList.remove('selected');
+      });
+    }
+
+    function toggleRow(id, checked) {
+      if (checked) selectedIds.add(id);
+      else selectedIds.delete(id);
+      updateBulkUI();
+    }
+
+    function toggleAll(checked) {
+      selectedIds.clear();
+      if (checked) {
+        allEmails.forEach(e => {
+          if (e.id !== undefined && e.id !== null) selectedIds.add(String(e.id));
+        });
+      }
+      document.querySelectorAll('.row-check').forEach(cb => { cb.checked = checked; });
+      updateBulkUI();
+    }
+
+    window.bulkDelete = async function () {
+      if (selectedIds.size === 0) return;
+      const ok = await customConfirm(
+        `האם למחוק ${selectedIds.size} רשומות? פעולה זו אינה הפיכה.`,
+        'מחיקה מרובה',
+        'מחק'
+      );
+      if (!ok) return;
+
+      const idsArr = [...selectedIds].map(x => isNaN(+x) ? x : +x);
+      const { error } = await supabase.from('emails').delete().in('id', idsArr);
+      if (error) {
+        await customAlert('המחיקה נכשלה. נסי שוב.', 'שגיאה');
+        return;
+      }
+      const n = selectedIds.size;
+      selectedIds.clear();
+      showToast(`${n} רשומות נמחקו`);
+      await loadEmails();
+    };
 
     /* ---------- LOAD EMAILS ---------- */
     window.loadEmails = async function () {
@@ -774,10 +990,17 @@
       if (error) {
         content.innerHTML = `<div class="error-state"><div class="state-title">שגיאה בטעינה</div><div class="state-desc">נסי לרענן. אם זה ממשיך — בדקי חיבור.</div></div>`;
         updateStats(0, 0, 0, 0);
+        allEmails = [];
+        updateBulkUI();
         return;
       }
 
       const all = data || [];
+      allEmails = all;
+      // Drop any selections referring to deleted rows
+      const currentIds = new Set(all.map(e => String(e.id)));
+      [...selectedIds].forEach(id => { if (!currentIds.has(id)) selectedIds.delete(id); });
+
       const highCount = all.filter(e => urgencyRank(e.urgency_level) === 1).length;
       const medCount  = all.filter(e => urgencyRank(e.urgency_level) === 2).length;
       const lowCount  = all.filter(e => urgencyRank(e.urgency_level) === 3).length;
@@ -785,16 +1008,21 @@
 
       if (all.length === 0) {
         content.innerHTML = '<div class="empty-state"><div class="state-title">תיבת המייל ריקה</div><div class="state-desc">כשמייל חדש יגיע, הוא יופיע כאן.</div></div>';
+        updateBulkUI();
         return;
       }
 
-      const sorted = [...all].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      const sorted = [...all].sort((a, b) =>
+        new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      );
+      allEmails = sorted;
 
       content.innerHTML = `
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
+                <th class="checkbox-cell"><input type="checkbox" id="header-check" class="header-check" aria-label="בחר הכל"></th>
                 <th>דחיפות</th>
                 <th>סוג שולח</th>
                 <th>סיווג</th>
@@ -804,15 +1032,20 @@
               </tr>
             </thead>
             <tbody>
-              ${sorted.map((e, i) => {
+              ${sorted.map((e) => {
                 const wait = waitingTime(e.created_at);
+                const id = e.id != null ? String(e.id) : '';
+                const dateStr = formatDate(e.created_at);
+                const senderH = senderTypeHebrew(e.sender_type);
+                const classH = classificationHebrew(e.classification);
                 return `
-                  <tr class="email-row" data-idx="${i}">
-                    <td>${urgencyCell(e.urgency_level)}</td>
-                    <td>${escapeHtml(senderTypeHebrew(e.sender_type))}</td>
-                    <td>${escapeHtml(classificationHebrew(e.classification))}</td>
-                    <td class="summary-cell">${escapeHtml(e.summary || '')}</td>
-                    <td class="date-cell">${formatDate(e.created_at)}</td>
+                  <tr class="email-row" data-id="${escapeHtml(id)}">
+                    <td class="checkbox-cell" data-noclick="1"><input type="checkbox" class="row-check" data-id="${escapeHtml(id)}" aria-label="בחר רשומה"></td>
+                    <td><span class="priority ${urgencyClass(e.urgency_level)}">${escapeHtml(urgencyLabel(e.urgency_level))}</span></td>
+                    <td>${valueOrEmpty(senderH)}</td>
+                    <td>${valueOrEmpty(classH)}</td>
+                    <td class="summary-cell">${valueOrEmpty(e.summary)}</td>
+                    <td class="date-cell">${valueOrEmpty(dateStr)}</td>
                     <td class="waiting-cell ${wait.cls}">${wait.text}</td>
                   </tr>
                 `;
@@ -822,33 +1055,103 @@
         </div>
       `;
 
+      // Row click → modal (but not when clicking the checkbox cell)
       document.querySelectorAll('.email-row').forEach((row) => {
-        row.addEventListener('click', () => {
-          const idx = parseInt(row.dataset.idx, 10);
-          openModal(sorted[idx]);
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('[data-noclick]')) return;
+          const id = row.dataset.id;
+          const found = sorted.find(x => String(x.id) === id);
+          if (found) openModal(found);
         });
       });
+
+      // Checkbox handlers
+      document.querySelectorAll('.row-check').forEach(cb => {
+        cb.checked = selectedIds.has(cb.dataset.id);
+        cb.addEventListener('click', e => e.stopPropagation());
+        cb.addEventListener('change', e => toggleRow(cb.dataset.id, cb.checked));
+      });
+      document.getElementById('header-check').addEventListener('change', e => {
+        toggleAll(e.target.checked);
+      });
+
+      updateBulkUI();
     };
 
     /* ---------- MODAL ---------- */
     window.openModal = function (email) {
       currentEmail = email;
+      originalVisible = false;
       document.getElementById('modal-title').textContent = email.student_name || 'ללא שם';
+
       const wait = waitingTime(email.created_at);
-      document.getElementById('modal-meta').innerHTML = `
-        ${urgencyMeta(email.urgency_level)}
-        <div class="meta-item">${escapeHtml(classificationHebrew(email.classification))}</div>
-        <div class="meta-item">${escapeHtml(senderTypeHebrew(email.sender_type))}</div>
-        <div class="meta-item text-muted">המתין ${wait.text}</div>
-      `;
-      document.getElementById('modal-summary').textContent = email.summary || 'אין תקציר';
-      document.getElementById('modal-draft').value = email.draft_reply || '';
+      const senderH = senderTypeHebrew(email.sender_type);
+      const classH = classificationHebrew(email.classification);
+      const urgClass = urgencyClass(email.urgency_level);
+
+      const metaParts = [
+        `<div class="meta-item ${urgClass}">דחיפות ${escapeHtml(urgencyLabel(email.urgency_level))}</div>`,
+        classH ? `<div class="meta-item">${escapeHtml(classH)}</div>` : '',
+        senderH ? `<div class="meta-item">${escapeHtml(senderH)}</div>` : '',
+        `<div class="meta-item">המתין ${wait.text}</div>`,
+      ].filter(Boolean);
+      document.getElementById('modal-meta').innerHTML = metaParts.join('');
+
+      const summaryEl = document.getElementById('modal-summary');
+      if (email.summary && String(email.summary).trim()) {
+        summaryEl.textContent = email.summary;
+        summaryEl.classList.remove('empty-value');
+      } else {
+        summaryEl.textContent = 'לא צוין';
+        summaryEl.classList.add('empty-value');
+      }
+
+      const draft = document.getElementById('modal-draft');
+      draft.value = email.draft_reply || '';
+
+      // Hallucination check
+      renderWarnings(draft.value, getOriginalEmail(email));
+
+      // Original email panel (hidden initially)
+      const panel = document.getElementById('original-panel');
+      panel.classList.remove('show', 'empty');
+      panel.textContent = '';
+      document.getElementById('toggle-original-btn').textContent = 'צפה במייל המקורי';
+
       document.getElementById('modal').classList.add('open');
+    };
+
+    // Re-check warnings on edit
+    document.getElementById('modal-draft').addEventListener('input', (e) => {
+      const original = currentEmail ? getOriginalEmail(currentEmail) : null;
+      renderWarnings(e.target.value, original);
+    });
+
+    window.toggleOriginal = function () {
+      const panel = document.getElementById('original-panel');
+      const btn = document.getElementById('toggle-original-btn');
+      originalVisible = !originalVisible;
+      if (originalVisible) {
+        const body = getOriginalEmail(currentEmail);
+        if (body && String(body).trim()) {
+          panel.textContent = body;
+          panel.classList.remove('empty');
+        } else {
+          panel.textContent = 'גוף המייל המקורי לא נשמר במאגר עבור רשומה זו.';
+          panel.classList.add('empty');
+        }
+        panel.classList.add('show');
+        btn.textContent = 'הסתר מייל מקורי';
+      } else {
+        panel.classList.remove('show');
+        btn.textContent = 'צפה במייל המקורי';
+      }
     };
 
     window.closeModal = function () {
       document.getElementById('modal').classList.remove('open');
       currentEmail = null;
+      originalVisible = false;
     };
 
     window.copyDraft = async function () {
@@ -873,7 +1176,11 @@
 
     window.markAsDone = async function () {
       if (!currentEmail) return;
-      const ok = await customConfirm('המייל יוסר מהרשימה. פעולה זו אינה הפיכה.', 'סימון כטופל');
+      const ok = await customConfirm(
+        'הרשומה תוסר מהרשימה. פעולה זו אינה הפיכה.',
+        'סימון כטופל',
+        'סמן כטופל'
+      );
       if (!ok) return;
 
       let query = supabase.from('emails').delete();

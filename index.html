@@ -448,20 +448,26 @@
       margin-inline-end: 4px;
     }
 
-    /* Original email panel */
+    /* Original email panel — styled like the draft textarea, but read-only */
     .original-panel {
       margin-top: 12px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 14px;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: 1.7;
       color: var(--text);
       white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
       max-height: 320px;
       overflow-y: auto;
+      overflow-x: hidden;
       display: none;
+      direction: rtl;
+      text-align: right;
+      font-family: inherit;
     }
     .original-panel.show { display: block; }
     .original-panel.empty {
@@ -841,6 +847,29 @@
       return row.original_email || row.email_body || row.body || null;
     }
 
+    // If the stored value looks like base64, decode it to UTF-8 text.
+    // Otherwise return as-is. Safe round-trip: if decode produces garbage
+    // (re-encoding doesn't match), we fall back to the raw value.
+    function tryDecodeBase64(str) {
+      if (str == null) return str;
+      const s = String(str).trim();
+      if (s.length === 0) return s;
+      // Quick shape check: only base64 charset, length multiple of 4
+      if (!/^[A-Za-z0-9+/]+={0,2}$/.test(s.replace(/\s+/g, ''))) return s;
+      try {
+        const clean = s.replace(/\s+/g, '');
+        const binary = atob(clean);
+        const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+        const decoded = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+        // Sanity: decoded should not contain weird replacement chars dominating
+        const replacementCount = (decoded.match(/�/g) || []).length;
+        if (replacementCount > decoded.length * 0.1) return s;
+        return decoded;
+      } catch {
+        return s;
+      }
+    }
+
     /* ---------- PLACEHOLDER DETECTION (informational) ----------
        Claude is instructed to leave [bracketed] placeholders for any
        detail it does not know. This function just surfaces them so
@@ -1091,7 +1120,8 @@
       const btn = document.getElementById('toggle-original-btn');
       originalVisible = !originalVisible;
       if (originalVisible) {
-        const body = getOriginalEmail(currentEmail);
+        const raw = getOriginalEmail(currentEmail);
+        const body = tryDecodeBase64(raw);
         if (body && String(body).trim()) {
           panel.textContent = body;
           panel.classList.remove('empty');

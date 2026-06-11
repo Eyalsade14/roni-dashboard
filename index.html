@@ -767,16 +767,39 @@
       absence_notification: 'היעדרות',
       grade_question: 'שאלת ציון',
       assignment_help: 'עזרה במטלה',
+      schedule_question: 'שאלה על לוז',
+      material_question: 'שאלה על החומר',
+      exam_question: 'שאלה על בחינה',
+      registration_question: 'שאלה על רישום',
+      meeting_request: 'בקשת פגישה',
+      personal_inquiry: 'פנייה אישית',
+      thank_you: 'תודה',
+      complaint: 'תלונה',
+      technical_issue: 'תקלה טכנית',
       system_alert: 'התראת מערכת',
       system_notification: 'הודעת מערכת',
       system_error_notification: 'שגיאת מערכת',
+      automated_response: 'מענה אוטומטי',
+      delivery_failure: 'כשל מסירה',
+      linkedin_connection_request: 'בקשת לינקדאין',
+      newsletter: 'ניוזלטר',
+      promotional_newsletter: 'ניוזלטר פרסומי',
+      promotional_or_newsletter: 'פרסומת / ניוזלטר',
+      promotion: 'מבצע / פרסומת',
+      commercial_email: 'מייל מסחרי',
+      commercial_spam: 'ספאם מסחרי',
+      spam: 'ספאם',
       spam_or_malformed: 'ספאם',
-      technical_issue: 'תקלה טכנית',
+      spam_or_irrelevant: 'ספאם / לא רלוונטי',
       test: 'בדיקה',
+      other: 'אחר',
     };
     function classificationHebrew(c) {
       if (!c) return null;
-      return classificationMap[String(c).toLowerCase().trim()] || c;
+      const key = String(c).toLowerCase().trim();
+      if (classificationMap[key]) return classificationMap[key];
+      // Fallback: convert snake_case → spaced text so it doesn't look raw
+      return key.replace(/_/g, ' ');
     }
 
     /* ---------- HELPERS ---------- */
